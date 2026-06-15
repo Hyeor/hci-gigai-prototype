@@ -36,19 +36,30 @@
       <input type="email" value="alex.rahman@gigaipro.my" placeholder="you@example.com">
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" value="••••••••" placeholder="Enter your password">
+      <div class="login-label-row">
+        <label>Password</label>
+        <span class="login-forgot" onclick="showToast('Password reset link sent — check your inbox.')">Forgot password?</span>
+      </div>
+      <div class="pw-wrap">
+        <input type="password" id="login-password" value="••••••••" placeholder="Enter your password">
+        <button type="button" class="pw-toggle" onclick="togglePasswordVisibility()" title="Toggle password">
+          <i class="ti ti-eye" id="pwd-toggle-icon"></i>
+        </button>
+      </div>
     </div>
 
-    <button class="btn-primary full-width" onclick="startApp()">
+    <button class="btn-primary full-width" onclick="startApp()" style="margin-top:4px">
       <i class="ti ti-login"></i> Sign in
     </button>
-    <button class="btn-ghost" onclick="startApp()" style="margin-top:10px">
-      <i class="ti ti-eye"></i> View demo (no login required)
+
+    <div class="login-divider"><span>or</span></div>
+
+    <button class="btn-ghost" onclick="startApp()">
+      <i class="ti ti-eye"></i> Continue as guest (demo mode)
     </button>
 
-    <p class="login-footer" style="margin-top:1.5rem;text-align:center;font-size:11px;color:#4b5563">
-      HCI Task 2 · BAXU 2313 · UTeM Fakulti Kecerdasan Buatan & Keselamatan Siber
+    <p class="login-footer" style="margin-top:1.75rem;text-align:center;font-size:11px;color:var(--text-muted)">
+      By signing in you agree to our <span style="color:var(--primary-light);cursor:pointer">Terms of Service</span> and <span style="color:var(--primary-light);cursor:pointer">Privacy Policy</span>
     </p>
   </div>
 </div>
@@ -93,13 +104,22 @@
         <i class="ti ti-credit-card"></i>
         <span>AI Payment</span>
       </a>
+
+      <div class="nav-section-label">Account</div>
+
+      <a class="nav-item" data-screen="settings" onclick="showScreen('settings')">
+        <i class="ti ti-settings"></i>
+        <span>Settings</span>
+      </a>
     </nav>
 
     <div class="sidebar-user">
-      <div class="user-avatar">AR</div>
-      <div class="user-info">
-        <p class="user-name">Alex Rahman</p>
-        <p class="user-role">AI Trainer · Pro</p>
+      <div class="sidebar-user-clickable" onclick="showScreen('profile')" title="View your profile">
+        <div class="user-avatar" id="sidebar-avatar">AR</div>
+        <div class="user-info">
+          <p class="user-name" id="sidebar-user-name">Alex Rahman</p>
+          <p class="user-role">AI Trainer · Pro</p>
+        </div>
       </div>
       <button class="btn-icon" title="Sign out" onclick="signOut()">
         <i class="ti ti-logout"></i>
@@ -124,10 +144,10 @@
           <i class="ti ti-bell"></i>
           <span class="badge-dot"></span>
         </button>
-        <button class="btn-icon" title="Settings" onclick="showToast('Settings panel coming soon')">
+        <button class="btn-icon" title="Settings" onclick="showScreen('settings')">
           <i class="ti ti-settings"></i>
         </button>
-        <div class="topbar-avatar" title="Alex Rahman">AR</div>
+        <div class="topbar-avatar" id="topbar-avatar" title="Go to Settings" onclick="showScreen('settings')">AR</div>
       </div>
     </header>
 
@@ -141,7 +161,7 @@
 
         <div class="welcome-banner">
           <div>
-            <h2>Good morning, Alex Rahman 👋</h2>
+            <h2>Good morning, <span id="welcome-user-name">Alex Rahman</span> 👋</h2>
             <p>Monday, 16 June 2026 — here's your performance at a glance</p>
           </div>
           <div class="pro-badge">
@@ -326,29 +346,62 @@
           <div class="profile-main">
             <div class="profile-avatar">AR</div>
             <div class="profile-info">
-              <div class="profile-name-row">
-                <h2>Alex Rahman</h2>
-                <span class="badge primary">AI Trainer</span>
-                <span class="badge success"><i class="ti ti-circle-check"></i> Verified</span>
+
+              <!-- ── VIEW MODE ────────────────────────────── -->
+              <div id="profile-view-mode">
+                <div class="profile-name-row">
+                  <h2 id="profile-display-name">Alex Rahman</h2>
+                  <span class="badge primary">AI Trainer</span>
+                  <span class="badge success"><i class="ti ti-circle-check"></i> Verified</span>
+                </div>
+                <p class="profile-bio" id="profile-display-bio">
+                  Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.
+                </p>
+                <div class="profile-tagline-box">
+                  <i class="ti ti-sparkles tagline-icon"></i>
+                  <p>AI-generated tagline: <em id="profile-display-tagline">"Building AI Literacy, One Learner at a Time"</em></p>
+                </div>
+                <div class="profile-actions">
+                  <button class="btn-primary sm" onclick="toggleProfileEdit(true)">
+                    <i class="ti ti-edit"></i> Edit profile
+                  </button>
+                  <button class="btn-outline sm" onclick="showToast('AI branding regenerated! New logo, tagline and colours applied.')">
+                    <i class="ti ti-sparkles"></i> Regenerate branding
+                  </button>
+                  <button class="btn-outline sm" onclick="showToast('Profile link copied to clipboard!')">
+                    <i class="ti ti-share"></i> Share
+                  </button>
+                </div>
               </div>
-              <p class="profile-bio">
-                Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.
-              </p>
-              <div class="profile-tagline-box">
-                <i class="ti ti-sparkles tagline-icon"></i>
-                <p>AI-generated tagline: <em>"Building AI Literacy, One Learner at a Time"</em></p>
+
+              <!-- ── EDIT MODE (hidden) ──────────────────── -->
+              <div id="profile-edit-mode" class="profile-edit-box" style="display:none">
+                <div class="two-col-grid" style="margin-bottom:0">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-input" id="edit-profile-fname" value="Alex">
+                  </div>
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-input" id="edit-profile-lname" value="Rahman">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Bio</label>
+                  <textarea class="form-input" id="edit-profile-bio" rows="3" style="resize:vertical">Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.</textarea>
+                </div>
+                <div class="form-group">
+                  <label>Website</label>
+                  <input type="url" class="form-input" id="edit-profile-website" placeholder="https://yourwebsite.com" value="https://alexrahman.my">
+                </div>
+                <div class="profile-actions">
+                  <button class="btn-primary sm" onclick="saveProfile()">
+                    <i class="ti ti-device-floppy"></i> Save profile
+                  </button>
+                  <button class="btn-outline sm" onclick="toggleProfileEdit(false)">Cancel</button>
+                </div>
               </div>
-              <div class="profile-actions">
-                <button class="btn-outline sm" onclick="showToast('Profile editor opened')">
-                  <i class="ti ti-edit"></i> Edit profile
-                </button>
-                <button class="btn-primary sm" onclick="showToast('AI branding regenerated! New logo, tagline and colours applied.')">
-                  <i class="ti ti-sparkles"></i> Regenerate AI branding
-                </button>
-                <button class="btn-outline sm" onclick="showToast('Profile link copied to clipboard!')">
-                  <i class="ti ti-share"></i> Share profile
-                </button>
-              </div>
+
             </div>
             <div class="profile-stats">
               <div class="stat-item">
@@ -443,19 +496,23 @@
 
             <div class="divider"></div>
 
-            <p class="field-label">Connected social accounts</p>
-            <div class="social-badges">
-              <span class="social-badge linkedin" onclick="showToast('LinkedIn profile: linkedin.com/in/alexrahman-ai')">
-                <i class="ti ti-brand-linkedin"></i> LinkedIn
-              </span>
-              <span class="social-badge instagram" onclick="showToast('Instagram: @alexrahman.ai')">
-                <i class="ti ti-brand-instagram"></i> Instagram
-              </span>
-              <span class="social-badge youtube" onclick="showToast('YouTube: @GigAIAlex — 4.2k subscribers')">
-                <i class="ti ti-brand-youtube"></i> YouTube
-              </span>
-              <button class="btn-outline sm" onclick="showToast('Connect a new social account')">
-                <i class="ti ti-plus"></i> Connect
+            <p class="field-label">Social media links</p>
+            <div id="social-links-list" class="social-links-list"></div>
+
+            <div class="social-add-row">
+              <select id="social-platform-select">
+                <option value="linkedin">LinkedIn</option>
+                <option value="instagram">Instagram</option>
+                <option value="youtube">YouTube</option>
+                <option value="twitter">X / Twitter</option>
+                <option value="tiktok">TikTok</option>
+                <option value="facebook">Facebook</option>
+                <option value="github">GitHub</option>
+                <option value="website">Website / Blog</option>
+              </select>
+              <input type="url" class="social-url-input" id="social-url-input" placeholder="https://...">
+              <button class="btn-primary sm" onclick="addSocialLink()">
+                <i class="ti ti-plus"></i> Add
               </button>
             </div>
           </div>
@@ -1170,6 +1227,313 @@
               <div class="security-icon info-icon"><i class="ti ti-shield"></i></div>
               <p class="security-name">Rate limiting</p>
               <p class="security-desc">DDoS &amp; brute-force protection</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─── SETTINGS ──────────────────────────────────────────── -->
+      <section id="screen-settings" class="screen">
+
+        <!-- Account Information -->
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-user-circle"></i> Account Information</div>
+              <div class="card-sub">Update your public profile details</div>
+            </div>
+          </div>
+          <div class="settings-profile-row">
+            <div class="settings-avatar-wrap">
+              <div class="settings-avatar" id="settings-avatar-preview">
+                <i class="ti ti-user" style="font-size:2.2rem;color:var(--text-muted);"></i>
+              </div>
+              <button class="btn-outline" style="margin-top:.75rem;font-size:.8rem;" onclick="document.getElementById('avatar-upload').click()">
+                <i class="ti ti-upload"></i> Upload Photo
+              </button>
+              <input type="file" id="avatar-upload" accept="image/*" style="display:none" onchange="previewAvatar(event)">
+            </div>
+            <div class="settings-fields">
+              <div class="two-col-grid">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" class="form-input" value="Alex" id="set-fname">
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" class="form-input" value="Rahman" id="set-lname">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" class="form-input" value="alex.rahman@gigaipro.my" id="set-email">
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <div style="display:flex;gap:.5rem;align-items:center;">
+                  <span class="badge badge-indigo" style="padding:.4rem .8rem;font-size:.85rem;">gigaipro.my/</span>
+                  <input type="text" class="form-input" value="alexrahman" id="set-username" style="flex:1;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Bio</label>
+                <textarea class="form-input" rows="3" id="set-bio" style="resize:vertical;">AI Trainer & Educator. Helping professionals upskill with practical AI courses. 🚀</textarea>
+              </div>
+              <div class="form-group">
+                <label>Website</label>
+                <input type="url" class="form-input" value="https://alexrahman.my" id="set-website">
+              </div>
+              <button class="btn-primary" onclick="saveSettings('profile')">
+                <i class="ti ti-device-floppy"></i> Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-bell"></i> Notification Preferences</div>
+              <div class="card-sub">Choose what you want to be notified about</div>
+            </div>
+          </div>
+          <div class="settings-toggle-list">
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">New Enrolments</div>
+                <div class="settings-toggle-desc">Get notified when a student enrols in your course</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked onchange="toggleNotif(this,'enrolments')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">Course Reviews</div>
+                <div class="settings-toggle-desc">Email alerts for new reviews and ratings</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked onchange="toggleNotif(this,'reviews')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">Payment Received</div>
+                <div class="settings-toggle-desc">Instant notifications for completed transactions</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked onchange="toggleNotif(this,'payments')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">Marketing Reports</div>
+                <div class="settings-toggle-desc">Weekly AI marketing performance summaries</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" onchange="toggleNotif(this,'marketing')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">Platform Updates</div>
+                <div class="settings-toggle-desc">New features and product announcements</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked onchange="toggleNotif(this,'updates')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-toggle-row">
+              <div>
+                <div class="settings-toggle-label">SMS Alerts</div>
+                <div class="settings-toggle-desc">Text messages for critical account events only</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" onchange="toggleNotif(this,'sms')">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy & Security -->
+        <div class="two-col-grid" style="margin-bottom:1.5rem;align-items:start;">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title"><i class="ti ti-shield-lock"></i> Security</div>
+                <div class="card-sub">Protect your account</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Current Password</label>
+              <input type="password" class="form-input" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" class="form-input" placeholder="Min. 8 characters">
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" class="form-input" placeholder="Repeat new password">
+            </div>
+            <button class="btn-primary" onclick="saveSettings('password')" style="width:100%;">
+              <i class="ti ti-key"></i> Update Password
+            </button>
+
+            <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+                <div>
+                  <div class="settings-toggle-label">Two-Factor Authentication</div>
+                  <div class="settings-toggle-desc">Extra layer of security via authenticator app</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleNotif(this,'2fa')">
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title"><i class="ti ti-device-laptop"></i> Active Sessions</div>
+                <div class="card-sub">Devices currently logged in</div>
+              </div>
+            </div>
+            <div class="session-list">
+              <div class="session-item">
+                <div class="session-icon"><i class="ti ti-device-laptop"></i></div>
+                <div class="session-info">
+                  <div class="session-name">Windows PC — Chrome</div>
+                  <div class="session-meta">Kuala Lumpur, MY · <span class="badge badge-green" style="font-size:.7rem;">Current</span></div>
+                </div>
+              </div>
+              <div class="session-item">
+                <div class="session-icon"><i class="ti ti-device-mobile"></i></div>
+                <div class="session-info">
+                  <div class="session-name">iPhone 15 — Safari</div>
+                  <div class="session-meta">Last active 2h ago</div>
+                </div>
+                <button class="btn-icon" style="color:var(--danger);" onclick="showToast('Session revoked.')"><i class="ti ti-x"></i></button>
+              </div>
+              <div class="session-item">
+                <div class="session-icon"><i class="ti ti-device-tablet"></i></div>
+                <div class="session-info">
+                  <div class="session-name">iPad Pro — Chrome</div>
+                  <div class="session-meta">Last active 3d ago</div>
+                </div>
+                <button class="btn-icon" style="color:var(--danger);" onclick="showToast('Session revoked.')"><i class="ti ti-x"></i></button>
+              </div>
+            </div>
+            <button class="btn-outline" style="width:100%;margin-top:1rem;color:var(--danger);border-color:var(--danger);" onclick="showToast('All other sessions revoked.')">
+              <i class="ti ti-logout"></i> Revoke All Other Sessions
+            </button>
+          </div>
+        </div>
+
+        <!-- Platform Preferences -->
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-adjustments-horizontal"></i> Platform Preferences</div>
+              <div class="card-sub">Customise your GigAI Pro experience</div>
+            </div>
+          </div>
+          <div class="two-col-grid">
+            <div class="form-group">
+              <label>Language</label>
+              <select class="form-input" onchange="showToast('Language preference saved.')">
+                <option selected>English (US)</option>
+                <option>Bahasa Malaysia</option>
+                <option>Mandarin (简体)</option>
+                <option>Tamil</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Timezone</label>
+              <select class="form-input" onchange="showToast('Timezone preference saved.')">
+                <option selected>Asia/Kuala_Lumpur (UTC+8)</option>
+                <option>Asia/Singapore (UTC+8)</option>
+                <option>UTC+0 (London)</option>
+                <option>America/New_York (UTC-5)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Currency Display</label>
+              <select class="form-input" onchange="showToast('Currency preference saved.')">
+                <option selected>MYR — Malaysian Ringgit</option>
+                <option>USD — US Dollar</option>
+                <option>SGD — Singapore Dollar</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date Format</label>
+              <select class="form-input" onchange="showToast('Date format saved.')">
+                <option selected>DD/MM/YYYY</option>
+                <option>MM/DD/YYYY</option>
+                <option>YYYY-MM-DD</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connected Integrations -->
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-plug-connected"></i> Connected Integrations</div>
+              <div class="card-sub">Social accounts and payment gateways</div>
+            </div>
+          </div>
+          <div class="integrations-grid" id="integrations-grid">
+            <!-- Rendered by renderIntegrations() in app.js -->
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card danger-zone-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title" style="color:var(--danger);"><i class="ti ti-alert-triangle"></i> Danger Zone</div>
+              <div class="card-sub">Irreversible account actions</div>
+            </div>
+          </div>
+          <div class="danger-zone-actions">
+            <div class="danger-action-row">
+              <div>
+                <div class="danger-action-label">Export All Data</div>
+                <div class="danger-action-desc">Download a copy of your courses, earnings, and account data</div>
+              </div>
+              <button class="btn-outline" onclick="showToast('Data export requested. You will receive an email within 24 hours.')">
+                <i class="ti ti-download"></i> Export
+              </button>
+            </div>
+            <div class="danger-action-row">
+              <div>
+                <div class="danger-action-label">Deactivate Account</div>
+                <div class="danger-action-desc">Temporarily hide your profile and suspend all courses</div>
+              </div>
+              <button class="btn-outline" style="color:var(--warning);border-color:var(--warning);" onclick="showToast('Account deactivated. You can reactivate anytime.')">
+                <i class="ti ti-pause"></i> Deactivate
+              </button>
+            </div>
+            <div class="danger-action-row">
+              <div>
+                <div class="danger-action-label">Delete Account</div>
+                <div class="danger-action-desc">Permanently delete your account and all associated data. This cannot be undone.</div>
+              </div>
+              <button class="btn-outline" style="color:var(--danger);border-color:var(--danger);" onclick="showToast('Type DELETE in the confirmation box to proceed.')">
+                <i class="ti ti-trash"></i> Delete Account
+              </button>
             </div>
           </div>
         </div>
