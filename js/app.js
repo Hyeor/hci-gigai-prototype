@@ -10,7 +10,8 @@ const PAGE_TITLES = {
   courses:    'Course Marketplace',
   marketing:  'AI Marketing Studio',
   automation: 'AI Automation Workflow',
-  payment:    'AI Payment Agent'
+  payment:    'AI Payment Agent',
+  settings:   'Settings'
 };
 
 function showScreen(name) {
@@ -220,10 +221,34 @@ document.addEventListener('click', function(e) {
 /* ── KEYBOARD SHORTCUT ──────────────────────────────────── */
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey || e.metaKey) {
-    const keys = { '1':'dashboard','2':'profile','3':'courses','4':'marketing','5':'automation','6':'payment' };
+    const keys = { '1':'dashboard','2':'profile','3':'courses','4':'marketing','5':'automation','6':'payment','7':'settings' };
     if (keys[e.key]) { e.preventDefault(); showScreen(keys[e.key]); }
   }
 });
+
+/* ── SETTINGS ───────────────────────────────────────────── */
+function saveSettings(section) {
+  const labels = { profile: 'Profile updated!', password: 'Password changed successfully!' };
+  showToast(labels[section] || 'Settings saved!');
+}
+
+function toggleNotif(checkbox, key) {
+  const label = { enrolments:'Enrolment', reviews:'Review', payments:'Payment',
+    marketing:'Marketing report', updates:'Platform update', sms:'SMS', '2fa':'Two-Factor Auth' }[key] || key;
+  showToast(`${label} notifications ${checkbox.checked ? 'enabled' : 'disabled'}.`);
+}
+
+function previewAvatar(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wrap = document.getElementById('settings-avatar-preview');
+    wrap.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+  };
+  reader.readAsDataURL(file);
+  showToast('Profile photo updated!');
+}
 
 /* ── INIT ───────────────────────────────────────────────── */
 // Allow pressing Enter on login inputs
