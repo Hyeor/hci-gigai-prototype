@@ -156,6 +156,118 @@ function removeSocialLink(idx) {
   showToast(`${p.label || 'Link'} removed.`);
 }
 
+/* ── INTEGRATIONS ────────────────────────────────────────── */
+const INTEGRATIONS = [
+  { id: 'linkedin',  name: 'LinkedIn',    icon: 'ti-brand-linkedin',  bg: '#0077b5',                                                                               handle: '@alexrahman',      connected: true  },
+  { id: 'instagram', name: 'Instagram',   icon: 'ti-brand-instagram', bg: 'radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%)',   handle: '@alex.ai.trainer', connected: true  },
+  { id: 'youtube',   name: 'YouTube',     icon: 'ti-brand-youtube',   bg: '#ff0000',                                                                               handle: 'Alex AI Channel',  connected: true  },
+  { id: 'twitter',   name: 'X (Twitter)', icon: 'ti-brand-x',         bg: '#1a1a2e',                                                                               handle: '',                 connected: false },
+  { id: 'paypal',    name: 'PayPal',      icon: 'ti-brand-paypal',    bg: '#00457c',                                                                               handle: 'alex@paypal.my',   connected: true  },
+  { id: 'stripe',    name: 'Stripe',      icon: 'ti-credit-card',     bg: '#6772e5',                                                                               handle: '',                 connected: false },
+];
+
+let editingIntegrationId = null;
+
+function renderIntegrations() {
+  const grid = document.getElementById('integrations-grid');
+  if (!grid) return;
+
+  grid.innerHTML = INTEGRATIONS.map(intg => {
+    const isEditing = editingIntegrationId === intg.id;
+
+    if (isEditing) {
+      return `
+        <div class="integration-item intg-editing">
+          <div class="integration-logo" style="background:${intg.bg}"><i class="ti ${intg.icon}"></i></div>
+          <div class="integration-info" style="flex:1;min-width:0">
+            <div class="integration-name">${intg.name}</div>
+            <input class="intg-handle-input" id="intg-input-${intg.id}"
+              value="${escapeHtml(intg.handle)}"
+              placeholder="Enter username, handle or email"
+              onkeydown="handleIntgKey(event,'${intg.id}')">
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn-primary sm" onclick="saveIntegration('${intg.id}')">
+              <i class="ti ti-check"></i> Save
+            </button>
+            <button class="btn-outline sm" onclick="cancelIntgEdit()">Cancel</button>
+          </div>
+        </div>`;
+    }
+
+    if (intg.connected) {
+      return `
+        <div class="integration-item">
+          <div class="integration-logo" style="background:${intg.bg}"><i class="ti ${intg.icon}"></i></div>
+          <div class="integration-info">
+            <div class="integration-name">${intg.name}</div>
+            <div class="integration-status connected">
+              <i class="ti ti-circle-check" style="font-size:10px;margin-right:3px"></i>Connected
+              <span class="intg-handle-chip" onclick="startIntgEdit('${intg.id}')" title="Click to edit">
+                · ${escapeHtml(intg.handle)} <i class="ti ti-pencil intg-pencil"></i>
+              </span>
+            </div>
+          </div>
+          <button class="btn-outline" style="font-size:.8rem;" onclick="disconnectIntegration('${intg.id}')">Disconnect</button>
+        </div>`;
+    }
+
+    return `
+      <div class="integration-item intg-disconnected">
+        <div class="integration-logo intg-logo-dim" style="background:${intg.bg}"><i class="ti ${intg.icon}"></i></div>
+        <div class="integration-info">
+          <div class="integration-name">${intg.name}</div>
+          <div class="integration-status disconnected">Not connected</div>
+        </div>
+        <button class="btn-primary" style="font-size:.8rem;" onclick="startIntgEdit('${intg.id}')">Connect</button>
+      </div>`;
+  }).join('');
+}
+
+function startIntgEdit(id) {
+  editingIntegrationId = id;
+  renderIntegrations();
+  setTimeout(() => {
+    const input = document.getElementById(`intg-input-${id}`);
+    if (input) { input.focus(); input.select(); }
+  }, 30);
+}
+
+function cancelIntgEdit() {
+  editingIntegrationId = null;
+  renderIntegrations();
+}
+
+function saveIntegration(id) {
+  const input = document.getElementById(`intg-input-${id}`);
+  if (!input) return;
+  const handle = input.value.trim();
+  if (!handle) { showToast('Please enter a username, handle or email.'); input.focus(); return; }
+
+  const intg = INTEGRATIONS.find(i => i.id === id);
+  if (!intg) return;
+  const wasConnected = intg.connected;
+  intg.handle    = handle;
+  intg.connected = true;
+  editingIntegrationId = null;
+  renderIntegrations();
+  showToast(`${intg.name} ${wasConnected ? 'updated' : 'connected'} successfully!`);
+}
+
+function handleIntgKey(e, id) {
+  if (e.key === 'Enter')  saveIntegration(id);
+  if (e.key === 'Escape') cancelIntgEdit();
+}
+
+function disconnectIntegration(id) {
+  const intg = INTEGRATIONS.find(i => i.id === id);
+  if (!intg) return;
+  intg.connected = false;
+  intg.handle    = '';
+  renderIntegrations();
+  showToast(`${intg.name} disconnected.`);
+}
+
 /* ── PASSWORD TOGGLE (login) ─────────────────────────────── */
 function togglePasswordVisibility() {
   const input = document.getElementById('login-password');
@@ -439,6 +551,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Render social links list in profile screen
   renderSocialLinks();
+
+  // Render integrations grid in settings screen
+  renderIntegrations();
 
   // Sync profile to all UI elements on load
   updateProfileUI();

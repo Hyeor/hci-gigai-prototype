@@ -1752,6 +1752,51 @@ textarea.form-input { resize: vertical; }
 .profile-edit-box { animation: fadeIn .18s ease; }
 
 /* ══════════════════════════════════════════════════════════
+   INTEGRATIONS — inline edit
+══════════════════════════════════════════════════════════ */
+.intg-editing {
+  border-color: var(--primary-hover) !important;
+  background: var(--bg-surface2) !important;
+}
+
+.intg-logo-dim { opacity: .45; }
+
+.intg-handle-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+  margin-left: 1px;
+  transition: background .15s;
+}
+.intg-handle-chip:hover { background: rgba(99,102,241,.15); }
+
+.intg-pencil {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: color .15s;
+  flex-shrink: 0;
+}
+.intg-handle-chip:hover .intg-pencil { color: var(--primary-light); }
+
+.intg-handle-input {
+  width: 100%;
+  margin-top: 5px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  font-family: var(--font);
+  box-shadow: 0 0 0 3px var(--primary-dim);
+}
+.intg-handle-input::placeholder { color: var(--text-muted); }
+
+/* ══════════════════════════════════════════════════════════
    SOCIAL LINKS MANAGER
 ══════════════════════════════════════════════════════════ */
 .social-links-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; min-height: 4px; }

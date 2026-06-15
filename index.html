@@ -1494,55 +1494,8 @@
               <div class="card-sub">Social accounts and payment gateways</div>
             </div>
           </div>
-          <div class="integrations-grid">
-            <div class="integration-item">
-              <div class="integration-logo" style="background:#0077b5;"><i class="ti ti-brand-linkedin"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">LinkedIn</div>
-                <div class="integration-status connected">Connected · @alexrahman</div>
-              </div>
-              <button class="btn-outline" style="font-size:.8rem;" onclick="showToast('LinkedIn disconnected.')">Disconnect</button>
-            </div>
-            <div class="integration-item">
-              <div class="integration-logo" style="background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%);"><i class="ti ti-brand-instagram"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">Instagram</div>
-                <div class="integration-status connected">Connected · @alex.ai.trainer</div>
-              </div>
-              <button class="btn-outline" style="font-size:.8rem;" onclick="showToast('Instagram disconnected.')">Disconnect</button>
-            </div>
-            <div class="integration-item">
-              <div class="integration-logo" style="background:#ff0000;"><i class="ti ti-brand-youtube"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">YouTube</div>
-                <div class="integration-status connected">Connected · Alex AI Channel</div>
-              </div>
-              <button class="btn-outline" style="font-size:.8rem;" onclick="showToast('YouTube disconnected.')">Disconnect</button>
-            </div>
-            <div class="integration-item">
-              <div class="integration-logo" style="background:#1da1f2;"><i class="ti ti-brand-x"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">X (Twitter)</div>
-                <div class="integration-status disconnected">Not connected</div>
-              </div>
-              <button class="btn-primary" style="font-size:.8rem;" onclick="showToast('Redirecting to X authentication…')">Connect</button>
-            </div>
-            <div class="integration-item">
-              <div class="integration-logo" style="background:#00457c;"><i class="ti ti-brand-paypal"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">PayPal</div>
-                <div class="integration-status connected">Connected · alex@paypal.my</div>
-              </div>
-              <button class="btn-outline" style="font-size:.8rem;" onclick="showToast('PayPal disconnected.')">Disconnect</button>
-            </div>
-            <div class="integration-item">
-              <div class="integration-logo" style="background:#6772e5;"><i class="ti ti-credit-card"></i></div>
-              <div class="integration-info">
-                <div class="integration-name">Stripe</div>
-                <div class="integration-status disconnected">Not connected</div>
-              </div>
-              <button class="btn-primary" style="font-size:.8rem;" onclick="showToast('Redirecting to Stripe setup…')">Connect</button>
-            </div>
+          <div class="integrations-grid" id="integrations-grid">
+            <!-- Rendered by renderIntegrations() in app.js -->
           </div>
         </div>
 
