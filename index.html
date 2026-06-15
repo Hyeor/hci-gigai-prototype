@@ -36,19 +36,30 @@
       <input type="email" value="alex.rahman@gigaipro.my" placeholder="you@example.com">
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" value="••••••••" placeholder="Enter your password">
+      <div class="login-label-row">
+        <label>Password</label>
+        <span class="login-forgot" onclick="showToast('Password reset link sent — check your inbox.')">Forgot password?</span>
+      </div>
+      <div class="pw-wrap">
+        <input type="password" id="login-password" value="••••••••" placeholder="Enter your password">
+        <button type="button" class="pw-toggle" onclick="togglePasswordVisibility()" title="Toggle password">
+          <i class="ti ti-eye" id="pwd-toggle-icon"></i>
+        </button>
+      </div>
     </div>
 
-    <button class="btn-primary full-width" onclick="startApp()">
+    <button class="btn-primary full-width" onclick="startApp()" style="margin-top:4px">
       <i class="ti ti-login"></i> Sign in
     </button>
-    <button class="btn-ghost" onclick="startApp()" style="margin-top:10px">
-      <i class="ti ti-eye"></i> View demo (no login required)
+
+    <div class="login-divider"><span>or</span></div>
+
+    <button class="btn-ghost" onclick="startApp()">
+      <i class="ti ti-eye"></i> Continue as guest (demo mode)
     </button>
 
-    <p class="login-footer" style="margin-top:1.5rem;text-align:center;font-size:11px;color:#4b5563">
-      HCI Task 2 · BAXU 2313 · UTeM Fakulti Kecerdasan Buatan & Keselamatan Siber
+    <p class="login-footer" style="margin-top:1.75rem;text-align:center;font-size:11px;color:var(--text-muted)">
+      By signing in you agree to our <span style="color:var(--primary-light);cursor:pointer">Terms of Service</span> and <span style="color:var(--primary-light);cursor:pointer">Privacy Policy</span>
     </p>
   </div>
 </div>
@@ -103,10 +114,12 @@
     </nav>
 
     <div class="sidebar-user">
-      <div class="user-avatar">AR</div>
-      <div class="user-info">
-        <p class="user-name">Alex Rahman</p>
-        <p class="user-role">AI Trainer · Pro</p>
+      <div class="sidebar-user-clickable" onclick="showScreen('profile')" title="View your profile">
+        <div class="user-avatar" id="sidebar-avatar">AR</div>
+        <div class="user-info">
+          <p class="user-name" id="sidebar-user-name">Alex Rahman</p>
+          <p class="user-role">AI Trainer · Pro</p>
+        </div>
       </div>
       <button class="btn-icon" title="Sign out" onclick="signOut()">
         <i class="ti ti-logout"></i>
@@ -131,10 +144,10 @@
           <i class="ti ti-bell"></i>
           <span class="badge-dot"></span>
         </button>
-        <button class="btn-icon" title="Settings" onclick="showToast('Settings panel coming soon')">
+        <button class="btn-icon" title="Settings" onclick="showScreen('settings')">
           <i class="ti ti-settings"></i>
         </button>
-        <div class="topbar-avatar" title="Alex Rahman">AR</div>
+        <div class="topbar-avatar" id="topbar-avatar" title="Go to Settings" onclick="showScreen('settings')">AR</div>
       </div>
     </header>
 
@@ -148,7 +161,7 @@
 
         <div class="welcome-banner">
           <div>
-            <h2>Good morning, Alex Rahman 👋</h2>
+            <h2>Good morning, <span id="welcome-user-name">Alex Rahman</span> 👋</h2>
             <p>Monday, 16 June 2026 — here's your performance at a glance</p>
           </div>
           <div class="pro-badge">
@@ -333,29 +346,62 @@
           <div class="profile-main">
             <div class="profile-avatar">AR</div>
             <div class="profile-info">
-              <div class="profile-name-row">
-                <h2>Alex Rahman</h2>
-                <span class="badge primary">AI Trainer</span>
-                <span class="badge success"><i class="ti ti-circle-check"></i> Verified</span>
+
+              <!-- ── VIEW MODE ────────────────────────────── -->
+              <div id="profile-view-mode">
+                <div class="profile-name-row">
+                  <h2 id="profile-display-name">Alex Rahman</h2>
+                  <span class="badge primary">AI Trainer</span>
+                  <span class="badge success"><i class="ti ti-circle-check"></i> Verified</span>
+                </div>
+                <p class="profile-bio" id="profile-display-bio">
+                  Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.
+                </p>
+                <div class="profile-tagline-box">
+                  <i class="ti ti-sparkles tagline-icon"></i>
+                  <p>AI-generated tagline: <em id="profile-display-tagline">"Building AI Literacy, One Learner at a Time"</em></p>
+                </div>
+                <div class="profile-actions">
+                  <button class="btn-primary sm" onclick="toggleProfileEdit(true)">
+                    <i class="ti ti-edit"></i> Edit profile
+                  </button>
+                  <button class="btn-outline sm" onclick="showToast('AI branding regenerated! New logo, tagline and colours applied.')">
+                    <i class="ti ti-sparkles"></i> Regenerate branding
+                  </button>
+                  <button class="btn-outline sm" onclick="showToast('Profile link copied to clipboard!')">
+                    <i class="ti ti-share"></i> Share
+                  </button>
+                </div>
               </div>
-              <p class="profile-bio">
-                Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.
-              </p>
-              <div class="profile-tagline-box">
-                <i class="ti ti-sparkles tagline-icon"></i>
-                <p>AI-generated tagline: <em>"Building AI Literacy, One Learner at a Time"</em></p>
+
+              <!-- ── EDIT MODE (hidden) ──────────────────── -->
+              <div id="profile-edit-mode" class="profile-edit-box" style="display:none">
+                <div class="two-col-grid" style="margin-bottom:0">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-input" id="edit-profile-fname" value="Alex">
+                  </div>
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-input" id="edit-profile-lname" value="Rahman">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Bio</label>
+                  <textarea class="form-input" id="edit-profile-bio" rows="3" style="resize:vertical">Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.</textarea>
+                </div>
+                <div class="form-group">
+                  <label>Website</label>
+                  <input type="url" class="form-input" id="edit-profile-website" placeholder="https://yourwebsite.com" value="https://alexrahman.my">
+                </div>
+                <div class="profile-actions">
+                  <button class="btn-primary sm" onclick="saveProfile()">
+                    <i class="ti ti-device-floppy"></i> Save profile
+                  </button>
+                  <button class="btn-outline sm" onclick="toggleProfileEdit(false)">Cancel</button>
+                </div>
               </div>
-              <div class="profile-actions">
-                <button class="btn-outline sm" onclick="showToast('Profile editor opened')">
-                  <i class="ti ti-edit"></i> Edit profile
-                </button>
-                <button class="btn-primary sm" onclick="showToast('AI branding regenerated! New logo, tagline and colours applied.')">
-                  <i class="ti ti-sparkles"></i> Regenerate AI branding
-                </button>
-                <button class="btn-outline sm" onclick="showToast('Profile link copied to clipboard!')">
-                  <i class="ti ti-share"></i> Share profile
-                </button>
-              </div>
+
             </div>
             <div class="profile-stats">
               <div class="stat-item">
@@ -450,19 +496,23 @@
 
             <div class="divider"></div>
 
-            <p class="field-label">Connected social accounts</p>
-            <div class="social-badges">
-              <span class="social-badge linkedin" onclick="showToast('LinkedIn profile: linkedin.com/in/alexrahman-ai')">
-                <i class="ti ti-brand-linkedin"></i> LinkedIn
-              </span>
-              <span class="social-badge instagram" onclick="showToast('Instagram: @alexrahman.ai')">
-                <i class="ti ti-brand-instagram"></i> Instagram
-              </span>
-              <span class="social-badge youtube" onclick="showToast('YouTube: @GigAIAlex — 4.2k subscribers')">
-                <i class="ti ti-brand-youtube"></i> YouTube
-              </span>
-              <button class="btn-outline sm" onclick="showToast('Connect a new social account')">
-                <i class="ti ti-plus"></i> Connect
+            <p class="field-label">Social media links</p>
+            <div id="social-links-list" class="social-links-list"></div>
+
+            <div class="social-add-row">
+              <select id="social-platform-select">
+                <option value="linkedin">LinkedIn</option>
+                <option value="instagram">Instagram</option>
+                <option value="youtube">YouTube</option>
+                <option value="twitter">X / Twitter</option>
+                <option value="tiktok">TikTok</option>
+                <option value="facebook">Facebook</option>
+                <option value="github">GitHub</option>
+                <option value="website">Website / Blog</option>
+              </select>
+              <input type="url" class="social-url-input" id="social-url-input" placeholder="https://...">
+              <button class="btn-primary sm" onclick="addSocialLink()">
+                <i class="ti ti-plus"></i> Add
               </button>
             </div>
           </div>
