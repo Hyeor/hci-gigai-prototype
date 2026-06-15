@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GigAI Pro — AI Trainer Platform</title>
+  <meta name="description" content="HCI Task 2 Prototype: GigAI Pro — AI-powered platform for gig economy trainers. Course marketplace, AI marketing, automation & payment agent.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════════════════════════ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <i class="ti ti-robot"></i>
+      GigAI Pro
+    </div>
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-sub">Sign in to your AI Trainer dashboard</p>
+
+    <div class="form-group">
+      <label>Email address</label>
+      <input type="email" value="alex.rahman@gigaipro.my" placeholder="you@example.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" value="••••••••" placeholder="Enter your password">
+    </div>
+
+    <button class="btn-primary full-width" onclick="startApp()">
+      <i class="ti ti-login"></i> Sign in
+    </button>
+    <button class="btn-ghost" onclick="startApp()" style="margin-top:10px">
+      <i class="ti ti-eye"></i> View demo (no login required)
+    </button>
+
+    <p class="login-footer" style="margin-top:1.5rem;text-align:center;font-size:11px;color:#4b5563">
+      HCI Task 2 · BAXU 2313 · UTeM Fakulti Kecerdasan Buatan & Keselamatan Siber
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MAIN APPLICATION
+═══════════════════════════════════════════════════════════════ -->
+<div id="main-app" class="main-app hidden">
+
+  <!-- ─── SIDEBAR ──────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="ti ti-robot logo-icon"></i>
+      <span>GigAI Pro</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-screen="dashboard" onclick="showScreen('dashboard')">
+        <i class="ti ti-layout-dashboard"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-screen="profile" onclick="showScreen('profile')">
+        <i class="ti ti-user-circle"></i>
+        <span>Profile</span>
+      </a>
+      <a class="nav-item" data-screen="courses" onclick="showScreen('courses')">
+        <i class="ti ti-books"></i>
+        <span>Marketplace</span>
+      </a>
+
+      <div class="nav-section-label">AI Features</div>
+
+      <a class="nav-item" data-screen="marketing" onclick="showScreen('marketing')">
+        <i class="ti ti-speakerphone"></i>
+        <span>AI Marketing</span>
+      </a>
+      <a class="nav-item" data-screen="automation" onclick="showScreen('automation')">
+        <i class="ti ti-settings-automation"></i>
+        <span>Automation</span>
+      </a>
+      <a class="nav-item" data-screen="payment" onclick="showScreen('payment')">
+        <i class="ti ti-credit-card"></i>
+        <span>AI Payment</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">AR</div>
+      <div class="user-info">
+        <p class="user-name">Alex Rahman</p>
+        <p class="user-role">AI Trainer · Pro</p>
+      </div>
+      <button class="btn-icon" title="Sign out" onclick="signOut()">
+        <i class="ti ti-logout"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT ──────────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title" id="page-title">Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-bar">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search courses, students...">
+        </div>
+        <button class="btn-icon" title="Notifications" onclick="showToast('You have 3 new notifications — 1 new enrollment, 1 payment, 1 review')">
+          <i class="ti ti-bell"></i>
+          <span class="badge-dot"></span>
+        </button>
+        <button class="btn-icon" title="Settings" onclick="showToast('Settings panel coming soon')">
+          <i class="ti ti-settings"></i>
+        </button>
+        <div class="topbar-avatar" title="Alex Rahman">AR</div>
+      </div>
+    </header>
+
+    <!-- ─── SCREENS ──────────────────────────────────────────────── -->
+    <main class="screens-container">
+
+      <!-- ══════════════════════════════════════
+           SCREEN 1 · DASHBOARD
+      ══════════════════════════════════════ -->
+      <section id="screen-dashboard" class="screen active">
+
+        <div class="welcome-banner">
+          <div>
+            <h2>Good morning, Alex Rahman 👋</h2>
+            <p>Monday, 16 June 2026 — here's your performance at a glance</p>
+          </div>
+          <div class="pro-badge">
+            <i class="ti ti-crown"></i> Pro Plan Active
+          </div>
+        </div>
+
+        <!-- Metric cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon success"><i class="ti ti-currency-dollar"></i></div>
+            <div>
+              <p class="metric-label">Monthly revenue</p>
+              <p class="metric-value success-text">RM 4,820</p>
+              <p class="metric-change positive"><i class="ti ti-trending-up"></i> +18% vs last month</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon info"><i class="ti ti-users"></i></div>
+            <div>
+              <p class="metric-label">Active students</p>
+              <p class="metric-value">247</p>
+              <p class="metric-change positive"><i class="ti ti-trending-up"></i> +32 this week</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon warning"><i class="ti ti-book"></i></div>
+            <div>
+              <p class="metric-label">Published courses</p>
+              <p class="metric-value">12</p>
+              <p class="metric-change neutral"><i class="ti ti-clock"></i> 2 drafts pending</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon purple"><i class="ti ti-star"></i></div>
+            <div>
+              <p class="metric-label">Average rating</p>
+              <p class="metric-value">4.8 ★</p>
+              <p class="metric-change neutral">from 186 reviews</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue chart + AI Insights -->
+        <div class="two-col-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-chart-bar"></i> Revenue — last 6 months</h3>
+              <span class="badge success">AI Tracked</span>
+            </div>
+            <div class="chart-container">
+              <div class="bar-chart">
+                <div class="bar-group">
+                  <div class="bar" style="height:44%"></div>
+                  <span class="bar-label">Jan</span>
+                </div>
+                <div class="bar-group">
+                  <div class="bar" style="height:58%"></div>
+                  <span class="bar-label">Feb</span>
+                </div>
+                <div class="bar-group">
+                  <div class="bar" style="height:52%"></div>
+                  <span class="bar-label">Mar</span>
+                </div>
+                <div class="bar-group">
+                  <div class="bar" style="height:70%"></div>
+                  <span class="bar-label">Apr</span>
+                </div>
+                <div class="bar-group">
+                  <div class="bar" style="height:82%"></div>
+                  <span class="bar-label">May</span>
+                </div>
+                <div class="bar-group">
+                  <div class="bar success-bar" style="height:100%"></div>
+                  <span class="bar-label">Jun</span>
+                </div>
+              </div>
+              <div class="chart-labels">
+                <span>RM 0</span>
+                <span>RM 4,820 (Jun)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai-insight-card">
+            <div class="card-header">
+              <h3><i class="ti ti-brain"></i> AI Insights</h3>
+              <span class="badge primary">Live</span>
+            </div>
+            <div class="insight-list">
+              <div class="insight-item">
+                <i class="ti ti-bulb"></i>
+                <p>Python AI course has 94% completion rate — consider launching an advanced module.</p>
+              </div>
+              <div class="insight-item">
+                <i class="ti ti-clock"></i>
+                <p>Best post time: Tuesday 9am &amp; Thursday 7pm on LinkedIn.</p>
+              </div>
+              <div class="insight-item">
+                <i class="ti ti-chart-arrows-vertical"></i>
+                <p>Revenue dip expected mid-July — run a 20% discount campaign in Week 2.</p>
+              </div>
+            </div>
+            <button class="btn-primary sm" onclick="showScreen('marketing')">
+              <i class="ti ti-rocket"></i> Generate marketing plan
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick actions + Activity -->
+        <div class="two-col-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-zap"></i> Quick actions</h3>
+            </div>
+            <div class="quick-actions">
+              <button class="quick-action-btn" onclick="showScreen('courses')">
+                <i class="ti ti-plus"></i>
+                <span>Publish new course</span>
+              </button>
+              <button class="quick-action-btn" onclick="showScreen('marketing')">
+                <i class="ti ti-speakerphone"></i>
+                <span>Generate marketing post</span>
+              </button>
+              <button class="quick-action-btn" onclick="showScreen('payment')">
+                <i class="ti ti-chart-bar"></i>
+                <span>View revenue report</span>
+              </button>
+              <button class="quick-action-btn" onclick="showScreen('automation')">
+                <i class="ti ti-calendar"></i>
+                <span>Schedule training session</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-activity"></i> Recent activity</h3>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-icon success"><i class="ti ti-check"></i></div>
+                <div class="activity-text">
+                  <p class="activity-title">New enrollment: Prompt Engineering 101</p>
+                  <p class="activity-time">Siti Aminah · 2 mins ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon info"><i class="ti ti-credit-card"></i></div>
+                <div class="activity-text">
+                  <p class="activity-title">Payment received: RM 199</p>
+                  <p class="activity-time">Course bundle · 15 mins ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon warning"><i class="ti ti-star"></i></div>
+                <div class="activity-text">
+                  <p class="activity-title">New 5-star review on LangChain Mastery</p>
+                  <p class="activity-time">Raj Kumar · 1 hr ago</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon muted"><i class="ti ti-robot"></i></div>
+                <div class="activity-text">
+                  <p class="activity-title">AI chatbot auto-resolved 8 support queries</p>
+                  <p class="activity-time">Automated · 2 hrs ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SCREEN 2 · AI TRAINER PROFILE
+      ══════════════════════════════════════ -->
+      <section id="screen-profile" class="screen">
+
+        <!-- Profile header -->
+        <div class="card profile-header-card">
+          <div class="profile-main">
+            <div class="profile-avatar">AR</div>
+            <div class="profile-info">
+              <div class="profile-name-row">
+                <h2>Alex Rahman</h2>
+                <span class="badge primary">AI Trainer</span>
+                <span class="badge success"><i class="ti ti-circle-check"></i> Verified</span>
+              </div>
+              <p class="profile-bio">
+                Empowering the next generation of AI practitioners through practical, hands-on learning experiences. Specialising in Prompt Engineering, LangChain, and AI tooling for professionals.
+              </p>
+              <div class="profile-tagline-box">
+                <i class="ti ti-sparkles tagline-icon"></i>
+                <p>AI-generated tagline: <em>"Building AI Literacy, One Learner at a Time"</em></p>
+              </div>
+              <div class="profile-actions">
+                <button class="btn-outline sm" onclick="showToast('Profile editor opened')">
+                  <i class="ti ti-edit"></i> Edit profile
+                </button>
+                <button class="btn-primary sm" onclick="showToast('AI branding regenerated! New logo, tagline and colours applied.')">
+                  <i class="ti ti-sparkles"></i> Regenerate AI branding
+                </button>
+                <button class="btn-outline sm" onclick="showToast('Profile link copied to clipboard!')">
+                  <i class="ti ti-share"></i> Share profile
+                </button>
+              </div>
+            </div>
+            <div class="profile-stats">
+              <div class="stat-item">
+                <p class="stat-value">3.2k</p>
+                <p class="stat-label">Followers</p>
+              </div>
+              <div class="stat-item">
+                <p class="stat-value">12</p>
+                <p class="stat-label">Courses</p>
+              </div>
+              <div class="stat-item">
+                <p class="stat-value">186</p>
+                <p class="stat-label">Reviews</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- Branding assets -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-palette"></i> AI-generated branding assets</h3>
+              <button class="btn-primary sm" onclick="showToast('Regenerating branding assets with GPT-4o + Midjourney...')">
+                <i class="ti ti-refresh"></i> Regenerate
+              </button>
+            </div>
+
+            <p class="field-label">Logo concept</p>
+            <div class="logo-preview">
+              <i class="ti ti-robot logo-preview-icon"></i>
+              <span>GigAI <span class="primary-text">Alex</span></span>
+            </div>
+
+            <p class="field-label" style="margin-top:16px">Brand colour palette</p>
+            <div class="color-palette">
+              <div class="color-swatch" style="background:#185FA5" title="Trust Blue — #185FA5" onclick="showToast('Trust Blue #185FA5 copied!')"></div>
+              <div class="color-swatch" style="background:#0F6E56" title="Growth Teal — #0F6E56" onclick="showToast('Growth Teal #0F6E56 copied!')"></div>
+              <div class="color-swatch" style="background:#534AB7" title="Innovation Purple — #534AB7" onclick="showToast('Innovation Purple #534AB7 copied!')"></div>
+              <div class="color-swatch" style="background:#3C3C3C" title="Neutral Dark — #3C3C3C" onclick="showToast('Neutral Dark #3C3C3C copied!')"></div>
+            </div>
+
+            <p class="field-label" style="margin-top:16px">AI tagline variants — click to select</p>
+            <div class="tagline-list">
+              <div class="tagline-item selected">
+                <i class="ti ti-check-circle"></i>
+                <span>"Building AI Literacy, One Learner at a Time"</span>
+              </div>
+              <div class="tagline-item">
+                <i class="ti ti-circle"></i>
+                <span>"AI Skills. Real Results. Zero Fluff."</span>
+              </div>
+              <div class="tagline-item">
+                <i class="ti ti-circle"></i>
+                <span>"From Curious to Capable — with AI."</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Portfolio -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-layout-grid"></i> Portfolio highlights</h3>
+              <button class="btn-outline sm" onclick="showToast('Add portfolio item form opened')">
+                <i class="ti ti-plus"></i> Add
+              </button>
+            </div>
+
+            <div class="portfolio-list">
+              <div class="portfolio-item">
+                <div class="portfolio-icon info"><i class="ti ti-certificate"></i></div>
+                <div>
+                  <p class="portfolio-title">Certified AI Prompt Engineer</p>
+                  <p class="portfolio-meta">Coursera · 2025</p>
+                </div>
+              </div>
+              <div class="portfolio-item">
+                <div class="portfolio-icon warning"><i class="ti ti-award"></i></div>
+                <div>
+                  <p class="portfolio-title">Top Instructor Award — GigLearn 2025</p>
+                  <p class="portfolio-meta">Ranked Top 3% globally</p>
+                </div>
+              </div>
+              <div class="portfolio-item">
+                <div class="portfolio-icon success"><i class="ti ti-code"></i></div>
+                <div>
+                  <p class="portfolio-title">Open-source AI Toolkit (GitHub)</p>
+                  <p class="portfolio-meta">2.1k stars · Actively maintained</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="field-label">Connected social accounts</p>
+            <div class="social-badges">
+              <span class="social-badge linkedin" onclick="showToast('LinkedIn profile: linkedin.com/in/alexrahman-ai')">
+                <i class="ti ti-brand-linkedin"></i> LinkedIn
+              </span>
+              <span class="social-badge instagram" onclick="showToast('Instagram: @alexrahman.ai')">
+                <i class="ti ti-brand-instagram"></i> Instagram
+              </span>
+              <span class="social-badge youtube" onclick="showToast('YouTube: @GigAIAlex — 4.2k subscribers')">
+                <i class="ti ti-brand-youtube"></i> YouTube
+              </span>
+              <button class="btn-outline sm" onclick="showToast('Connect a new social account')">
+                <i class="ti ti-plus"></i> Connect
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SCREEN 3 · COURSE MARKETPLACE
+      ══════════════════════════════════════ -->
+      <section id="screen-courses" class="screen">
+
+        <div class="marketplace-toolbar">
+          <div class="search-bar lg">
+            <i class="ti ti-search"></i>
+            <input type="text" id="course-search" placeholder="Search courses, topics, skills..." oninput="filterCourses()">
+          </div>
+          <button class="btn-primary" onclick="showToast('New course draft created — AI auto-fill enabled')">
+            <i class="ti ti-plus"></i> Publish course
+          </button>
+        </div>
+
+        <div class="category-filters">
+          <button class="filter-btn active" onclick="filterCategory(this, 'all')">All courses</button>
+          <button class="filter-btn" onclick="filterCategory(this, 'prompt')">Prompt engineering</button>
+          <button class="filter-btn" onclick="filterCategory(this, 'llm')">LLM development</button>
+          <button class="filter-btn" onclick="filterCategory(this, 'tools')">AI tools</button>
+          <button class="filter-btn" onclick="filterCategory(this, 'ml')">Machine learning</button>
+          <button class="filter-btn" onclick="filterCategory(this, 'data')">Data science</button>
+        </div>
+
+        <div class="section-header">
+          <h3>Featured micro-credential courses</h3>
+          <span class="badge primary"><i class="ti ti-sparkles"></i> AI recommended</span>
+        </div>
+
+        <div class="courses-grid" id="courses-grid">
+
+          <div class="course-card" data-cat="prompt">
+            <div class="course-thumb blue"><i class="ti ti-brain"></i></div>
+            <div class="course-body">
+              <p class="course-title">Prompt Engineering 101</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.9 (82 reviews)</span>
+                <span class="course-price">RM 89</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 3.5 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 24 videos</span>
+                <span class="badge success sm">Bestseller</span>
+              </div>
+              <button class="btn-primary full-width" onclick="showToast('Enrolled in Prompt Engineering 101! Welcome email sent.')">Enroll now</button>
+            </div>
+          </div>
+
+          <div class="course-card" data-cat="llm">
+            <div class="course-thumb green"><i class="ti ti-code"></i></div>
+            <div class="course-body">
+              <p class="course-title">LangChain Mastery</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.7 (61 reviews)</span>
+                <span class="course-price">RM 149</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 6 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 38 videos</span>
+                <span class="badge primary sm">New</span>
+              </div>
+              <button class="btn-primary full-width" onclick="showToast('Enrolled in LangChain Mastery! Welcome email sent.')">Enroll now</button>
+            </div>
+          </div>
+
+          <div class="course-card" data-cat="tools">
+            <div class="course-thumb orange"><i class="ti ti-robot"></i></div>
+            <div class="course-body">
+              <p class="course-title">AI Tools Bootcamp</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.8 (43 reviews)</span>
+                <span class="course-price">RM 199</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 8 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 52 videos</span>
+              </div>
+              <button class="btn-primary full-width" onclick="showToast('Enrolled in AI Tools Bootcamp! Welcome email sent.')">Enroll now</button>
+            </div>
+          </div>
+
+          <div class="course-card" data-cat="ml">
+            <div class="course-thumb purple"><i class="ti ti-chart-dots-3"></i></div>
+            <div class="course-body">
+              <p class="course-title">ML Foundations with Python</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.6 (38 reviews)</span>
+                <span class="course-price">RM 129</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 7 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 44 videos</span>
+              </div>
+              <button class="btn-primary full-width" onclick="showToast('Enrolled in ML Foundations with Python!')">Enroll now</button>
+            </div>
+          </div>
+
+          <div class="course-card" data-cat="llm">
+            <div class="course-thumb teal"><i class="ti ti-database"></i></div>
+            <div class="course-body">
+              <p class="course-title">RAG Systems Deep Dive</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.9 (pre-release)</span>
+                <span class="course-price">RM 179</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 5 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 31 videos</span>
+                <span class="badge warning sm">Coming soon</span>
+              </div>
+              <button class="btn-outline full-width" onclick="showToast('Pre-enrolled! You\'ll be notified when the course launches.')">Pre-enroll</button>
+            </div>
+          </div>
+
+          <div class="course-card" data-cat="data">
+            <div class="course-thumb red"><i class="ti ti-chart-bar"></i></div>
+            <div class="course-body">
+              <p class="course-title">AI for Data Analysts</p>
+              <p class="course-author">by Alex Rahman</p>
+              <div class="course-meta">
+                <span class="course-rating"><i class="ti ti-star"></i> 4.7 (27 reviews)</span>
+                <span class="course-price">RM 99</span>
+              </div>
+              <div class="course-tags">
+                <span class="tag"><i class="ti ti-clock"></i> 4.5 hrs</span>
+                <span class="tag"><i class="ti ti-video"></i> 28 videos</span>
+              </div>
+              <button class="btn-primary full-width" onclick="showToast('Enrolled in AI for Data Analysts!')">Enroll now</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- My published courses table -->
+        <div class="section-header" style="margin-top:2rem">
+          <h3>My published courses</h3>
+          <button class="btn-outline sm" onclick="showToast('New course draft created')">
+            <i class="ti ti-plus"></i> New draft
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="published-courses-table">
+            <div class="table-row header-row">
+              <span>Course</span>
+              <span>Status</span>
+              <span>Students</span>
+              <span>Revenue</span>
+              <span>Action</span>
+            </div>
+            <div class="table-row">
+              <span><i class="ti ti-brain course-icon blue-icon"></i> Prompt Engineering 101</span>
+              <span><span class="badge success">Published</span></span>
+              <span>247</span>
+              <span class="success-text font-semibold">RM 1,840</span>
+              <span>
+                <button class="btn-icon sm" title="Edit course" onclick="showToast('Opening course editor...')">
+                  <i class="ti ti-edit"></i>
+                </button>
+              </span>
+            </div>
+            <div class="table-row">
+              <span><i class="ti ti-code course-icon green-icon"></i> LangChain Mastery</span>
+              <span><span class="badge success">Published</span></span>
+              <span>183</span>
+              <span class="success-text">RM 2,180</span>
+              <span>
+                <button class="btn-icon sm" title="Edit course" onclick="showToast('Opening course editor...')">
+                  <i class="ti ti-edit"></i>
+                </button>
+              </span>
+            </div>
+            <div class="table-row">
+              <span><i class="ti ti-database course-icon teal-icon"></i> RAG Systems Deep Dive</span>
+              <span><span class="badge warning">Draft</span></span>
+              <span>—</span>
+              <span>—</span>
+              <span>
+                <button class="btn-primary sm" onclick="showToast('AI is auto-publishing RAG Systems Deep Dive — transcription & SEO tagging in progress...')">
+                  <i class="ti ti-sparkles"></i> AI auto-publish
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SCREEN 4 · AI MARKETING STUDIO
+      ══════════════════════════════════════ -->
+      <section id="screen-marketing" class="screen">
+
+        <div class="ai-banner">
+          <i class="ti ti-speakerphone ai-banner-icon"></i>
+          <div>
+            <p class="ai-banner-title">AI Marketing &amp; Branding Studio</p>
+            <p class="ai-banner-sub">GPT-4o content generation · Midjourney branding · Zapier social automation</p>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- AI Content Generator -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-sparkles"></i> AI content generator</h3>
+              <span class="badge primary">GPT-4o</span>
+            </div>
+
+            <div class="form-group">
+              <label>Content type</label>
+              <select id="content-type">
+                <option value="linkedin">LinkedIn post caption</option>
+                <option value="instagram">Instagram ad copy</option>
+                <option value="email">Course promo email</option>
+                <option value="youtube">YouTube description</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Course / topic name</label>
+              <input type="text" id="content-topic" value="Prompt Engineering 101" placeholder="e.g. Prompt Engineering 101">
+            </div>
+            <div class="form-group">
+              <label>Tone</label>
+              <select id="content-tone">
+                <option>Professional</option>
+                <option>Casual &amp; friendly</option>
+                <option>Motivational</option>
+                <option>Educational</option>
+              </select>
+            </div>
+
+            <button class="btn-primary full-width" onclick="generateContent()">
+              <i class="ti ti-sparkles"></i> Generate with AI
+            </button>
+
+            <div class="ai-output-box" id="ai-output">
+              <div class="ai-output-label"><i class="ti ti-robot"></i> AI-generated output</div>
+              <p id="ai-output-text">🚀 Want to level up your AI skills? My Prompt Engineering 101 course is LIVE! 24 bite-sized videos. Real-world projects. Zero fluff. Join 247+ learners already mastering AI prompts. Link in bio! 🤖 #AI #PromptEngineering #AITrainer</p>
+              <div class="output-actions">
+                <button class="btn-outline sm" onclick="copyOutput()"><i class="ti ti-copy"></i> Copy</button>
+                <button class="btn-outline sm" onclick="showToast('Scheduled for LinkedIn — Tue 17 Jun, 9:00 AM')"><i class="ti ti-calendar"></i> Schedule</button>
+                <button class="btn-primary sm" onclick="generateContent()"><i class="ti ti-refresh"></i> Regenerate</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Scheduler -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-calendar-event"></i> Automated social scheduler</h3>
+              <button class="btn-primary sm" onclick="showToast('New post added to queue!')">
+                <i class="ti ti-plus"></i> Add post
+              </button>
+            </div>
+
+            <div class="schedule-list">
+              <div class="schedule-item">
+                <div class="schedule-platform linkedin-bg"><i class="ti ti-brand-linkedin"></i></div>
+                <div class="schedule-info">
+                  <p class="schedule-title">LinkedIn — Prompt Engineering post</p>
+                  <p class="schedule-time"><i class="ti ti-clock"></i> Tue 17 Jun · 9:00 AM</p>
+                </div>
+                <span class="badge warning">Scheduled</span>
+              </div>
+              <div class="schedule-item">
+                <div class="schedule-platform instagram-bg"><i class="ti ti-brand-instagram"></i></div>
+                <div class="schedule-info">
+                  <p class="schedule-title">Instagram — Course launch reel</p>
+                  <p class="schedule-time"><i class="ti ti-clock"></i> Thu 19 Jun · 7:00 PM</p>
+                </div>
+                <span class="badge warning">Scheduled</span>
+              </div>
+              <div class="schedule-item">
+                <div class="schedule-platform youtube-bg"><i class="ti ti-brand-youtube"></i></div>
+                <div class="schedule-info">
+                  <p class="schedule-title">YouTube — Community update post</p>
+                  <p class="schedule-time"><i class="ti ti-clock"></i> Sat 21 Jun · 11:00 AM</p>
+                </div>
+                <span class="badge ai-badge"><i class="ti ti-robot"></i> Auto-queued by AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audience Targeting -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ti ti-target"></i> AI audience targeting recommendations</h3>
+            <span class="badge ai-badge"><i class="ti ti-robot"></i> AI analysed</span>
+          </div>
+          <div class="targeting-grid">
+            <div class="targeting-card">
+              <div class="targeting-icon"><i class="ti ti-users"></i></div>
+              <p class="targeting-title">Primary audience</p>
+              <p class="targeting-value">Tech professionals, 25–40</p>
+              <p class="targeting-desc">Software engineers &amp; data analysts exploring AI career transition</p>
+            </div>
+            <div class="targeting-card">
+              <div class="targeting-icon channels"><i class="ti ti-device-mobile"></i></div>
+              <p class="targeting-title">Best performing channel</p>
+              <p class="targeting-value">LinkedIn &gt; Instagram</p>
+              <p class="targeting-desc">3.2× higher click-through rate on LinkedIn vs Instagram feeds</p>
+            </div>
+            <div class="targeting-card">
+              <div class="targeting-icon campaign"><i class="ti ti-rocket"></i></div>
+              <p class="targeting-title">AI-suggested campaign</p>
+              <p class="targeting-value">"AI Career Pivot" push</p>
+              <p class="targeting-desc">Estimated reach: 18,000 qualified profiles in MY &amp; SG</p>
+            </div>
+            <div class="targeting-card">
+              <div class="targeting-icon timing"><i class="ti ti-clock"></i></div>
+              <p class="targeting-title">Optimal post timing</p>
+              <p class="targeting-value">Tue 9am &amp; Thu 7pm</p>
+              <p class="targeting-desc">Derived from 90-day engagement analytics</p>
+            </div>
+          </div>
+          <button class="btn-primary sm" style="margin-top:1rem" onclick="showToast('Launching AI Campaign — targeting 18,000 profiles...')">
+            <i class="ti ti-rocket"></i> Launch AI campaign
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SCREEN 5 · AI AUTOMATION WORKFLOW
+      ══════════════════════════════════════ -->
+      <section id="screen-automation" class="screen">
+
+        <div class="ai-banner purple-banner">
+          <i class="ti ti-settings-automation ai-banner-icon"></i>
+          <div>
+            <p class="ai-banner-title">AI Automation Workflow</p>
+            <p class="ai-banner-sub">Zapier · n8n · OpenAI function calling · automated pipelines</p>
+          </div>
+        </div>
+
+        <!-- Course Publishing Pipeline -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header">
+            <h3><i class="ti ti-git-branch"></i> Automated course publishing pipeline</h3>
+            <span class="badge success"><i class="ti ti-circle"></i> Active</span>
+          </div>
+          <div class="pipeline-flow">
+            <div class="pipeline-step">
+              <div class="step-icon blue-step"><i class="ti ti-upload"></i></div>
+              <p class="step-label">Upload video</p>
+            </div>
+            <div class="pipeline-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-icon green-step"><i class="ti ti-robot"></i></div>
+              <p class="step-label">AI transcription</p>
+            </div>
+            <div class="pipeline-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-icon orange-step"><i class="ti ti-file-text"></i></div>
+              <p class="step-label">Auto-description</p>
+            </div>
+            <div class="pipeline-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-icon purple-step"><i class="ti ti-tags"></i></div>
+              <p class="step-label">AI SEO tagging</p>
+            </div>
+            <div class="pipeline-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-icon teal-step"><i class="ti ti-world"></i></div>
+              <p class="step-label">Auto-publish</p>
+            </div>
+            <div class="pipeline-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-icon info-step"><i class="ti ti-bell"></i></div>
+              <p class="step-label">Notify students</p>
+            </div>
+          </div>
+          <div class="pipeline-status">
+            <i class="ti ti-check-circle"></i>
+            Last auto-publish: "LangChain Mastery Module 8" — 2 hours ago · 183 students notified via email &amp; push
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- AI Chatbot -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-message-chatbot"></i> GigBot — AI student support</h3>
+              <span class="badge success"><i class="ti ti-circle"></i> Online</span>
+            </div>
+
+            <div class="chatbot-window" id="chatbot-window">
+              <div class="chat-msg bot-msg">
+                <div class="chat-avatar bot-avatar"><i class="ti ti-robot"></i></div>
+                <div class="chat-bubble bot-bubble">Hi! I'm GigBot 🤖 Your AI learning assistant. How can I help you today?</div>
+              </div>
+              <div class="chat-msg user-msg">
+                <div class="chat-bubble user-bubble">How do I access Module 5?</div>
+                <div class="chat-avatar user-avatar">S</div>
+              </div>
+              <div class="chat-msg bot-msg">
+                <div class="chat-avatar bot-avatar"><i class="ti ti-robot"></i></div>
+                <div class="chat-bubble bot-bubble">Module 5 unlocks after completing Module 4. You're 87% through — great progress! You should unlock it within the hour 🎉</div>
+              </div>
+            </div>
+
+            <div class="chatbot-input">
+              <input type="text" id="chat-input" placeholder="Ask GigBot anything..." onkeypress="handleChatKey(event)">
+              <button class="btn-primary" onclick="sendChatMessage()"><i class="ti ti-send"></i></button>
+            </div>
+            <p class="chatbot-stats"><i class="ti ti-robot"></i> 8 queries auto-resolved today · 94% satisfaction rate</p>
+          </div>
+
+          <!-- Smart Scheduling -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-calendar"></i> Smart scheduling</h3>
+              <span class="badge primary">AI optimised</span>
+            </div>
+            <p class="field-label" style="margin-bottom:12px">AI-suggested slots based on student availability analysis</p>
+
+            <div class="schedule-slots">
+              <div class="slot-item best">
+                <div class="slot-time">
+                  <p class="slot-day">Tue 17 Jun</p>
+                  <p class="slot-hour">8:00 PM</p>
+                </div>
+                <div class="slot-details">
+                  <p class="slot-title">Live Q&amp;A: Prompt Engineering 101</p>
+                  <p class="slot-meta"><i class="ti ti-users"></i> 14 students available</p>
+                </div>
+                <span class="badge success">Best slot</span>
+              </div>
+              <div class="slot-item">
+                <div class="slot-time">
+                  <p class="slot-day">Wed 18 Jun</p>
+                  <p class="slot-hour">10:00 AM</p>
+                </div>
+                <div class="slot-details">
+                  <p class="slot-title">Workshop: LangChain Basics</p>
+                  <p class="slot-meta"><i class="ti ti-users"></i> 9 students available</p>
+                </div>
+                <span class="badge muted">Good</span>
+              </div>
+              <div class="slot-item">
+                <div class="slot-time">
+                  <p class="slot-day">Fri 20 Jun</p>
+                  <p class="slot-hour">9:00 PM</p>
+                </div>
+                <div class="slot-details">
+                  <p class="slot-title">Open office hours</p>
+                  <p class="slot-meta"><i class="ti ti-users"></i> 6 students available</p>
+                </div>
+                <span class="badge muted">Okay</span>
+              </div>
+            </div>
+
+            <button class="btn-primary full-width" style="margin-top:12px" onclick="showToast('Session invites sent to 247 students via email!')">
+              <i class="ti ti-send"></i> Send invites to all students
+            </button>
+          </div>
+        </div>
+
+        <!-- Notification System -->
+        <div class="card" style="margin-top:16px">
+          <div class="card-header">
+            <h3><i class="ti ti-bell"></i> Automated notification system</h3>
+            <button class="btn-outline sm" onclick="showToast('New notification trigger created')">
+              <i class="ti ti-plus"></i> Create trigger
+            </button>
+          </div>
+          <div class="notification-table">
+            <div class="notif-row">
+              <div class="notif-icon-wrap info"><i class="ti ti-mail"></i></div>
+              <div class="notif-content">
+                <p class="notif-title">Course completion email sent — Siti Aminah</p>
+                <p class="notif-meta">Automated trigger · 5 mins ago</p>
+              </div>
+              <span class="badge success">Delivered</span>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon-wrap warning"><i class="ti ti-bell"></i></div>
+              <div class="notif-content">
+                <p class="notif-title">Session reminder sent — 247 students (Tue 9PM class)</p>
+                <p class="notif-meta">Scheduled trigger · 1 hr ago</p>
+              </div>
+              <span class="badge success">Sent</span>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon-wrap purple"><i class="ti ti-discount"></i></div>
+              <div class="notif-content">
+                <p class="notif-title">AI discount offer queued for 32 inactive students</p>
+                <p class="notif-meta">Sends tomorrow · 10:00 AM · 15% off Basic plan</p>
+              </div>
+              <span class="badge warning">Pending</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SCREEN 6 · AI PAYMENT AGENT
+      ══════════════════════════════════════ -->
+      <section id="screen-payment" class="screen">
+
+        <div class="ai-banner green-banner">
+          <i class="ti ti-credit-card ai-banner-icon"></i>
+          <div>
+            <p class="ai-banner-title">AI Payment Agent</p>
+            <p class="ai-banner-sub">Autonomous payment processing · Stripe · Billplz · FPX · e-Wallet integration</p>
+          </div>
+        </div>
+
+        <!-- Revenue metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon success"><i class="ti ti-currency-dollar"></i></div>
+            <div>
+              <p class="metric-label">Total revenue</p>
+              <p class="metric-value success-text">RM 28,460</p>
+              <p class="metric-change neutral">All-time earnings</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon info"><i class="ti ti-chart-arrows-vertical"></i></div>
+            <div>
+              <p class="metric-label">This month</p>
+              <p class="metric-value">RM 4,820</p>
+              <p class="metric-change positive"><i class="ti ti-trending-up"></i> +18% vs May</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon warning"><i class="ti ti-clock"></i></div>
+            <div>
+              <p class="metric-label">Pending payout</p>
+              <p class="metric-value warning-text">RM 1,240</p>
+              <p class="metric-change neutral">Processes 20 Jun</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon purple"><i class="ti ti-crown"></i></div>
+            <div>
+              <p class="metric-label">Active subscriptions</p>
+              <p class="metric-value">48</p>
+              <p class="metric-change neutral">RM 3,840/mo recurring</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- Payment flow diagram -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="ti ti-git-branch"></i> AI payment agent flow</h3>
+            </div>
+            <div class="payment-flow">
+              <div class="flow-step">
+                <div class="flow-num info-num">1</div>
+                <div class="flow-box">
+                  <p class="flow-title">Student initiates payment</p>
+                  <p class="flow-desc">FPX · Credit/Debit card · Touch'n Go · GrabPay</p>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step">
+                <div class="flow-num warning-num">2</div>
+                <div class="flow-box">
+                  <p class="flow-title">AI agent validates &amp; screens</p>
+                  <p class="flow-desc">Real-time fraud detection · 2FA verification · risk scoring</p>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step">
+                <div class="flow-num success-num">3</div>
+                <div class="flow-box">
+                  <p class="flow-title">Payment gateway processes</p>
+                  <p class="flow-desc">Stripe · Billplz with PCI DSS Level 1 compliance</p>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step">
+                <div class="flow-num info-num">4</div>
+                <div class="flow-box">
+                  <p class="flow-title">AI grants course access</p>
+                  <p class="flow-desc">Auto-enroll · receipt email · welcome notification</p>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step">
+                <div class="flow-num purple-num">5</div>
+                <div class="flow-box">
+                  <p class="flow-title">Revenue recorded &amp; tracked</p>
+                  <p class="flow-desc">Dashboard updated · tax report generated · AI analytics refreshed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subscriptions + AI Pricing -->
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div class="card-header">
+                <h3><i class="ti ti-crown"></i> Subscription tiers</h3>
+                <button class="btn-outline sm" onclick="showToast('Subscription management panel opened')">
+                  <i class="ti ti-settings"></i> Manage
+                </button>
+              </div>
+              <div class="subscription-list">
+                <div class="sub-tier">
+                  <div class="sub-info">
+                    <p class="sub-name">Basic</p>
+                    <p class="sub-desc">3 courses/month · Email support</p>
+                  </div>
+                  <div class="sub-price">
+                    <p class="sub-amount">RM 39<span>/mo</span></p>
+                    <p class="sub-count">18 subscribers</p>
+                  </div>
+                </div>
+                <div class="sub-tier featured-tier">
+                  <div class="featured-label"><i class="ti ti-crown"></i> Most popular</div>
+                  <div class="sub-info">
+                    <p class="sub-name">Pro</p>
+                    <p class="sub-desc">Unlimited courses · Live sessions · Priority support</p>
+                  </div>
+                  <div class="sub-price">
+                    <p class="sub-amount">RM 89<span>/mo</span></p>
+                    <p class="sub-count">24 subscribers</p>
+                  </div>
+                </div>
+                <div class="sub-tier">
+                  <div class="sub-info">
+                    <p class="sub-name">Enterprise</p>
+                    <p class="sub-desc">Team access · Custom training · Dedicated manager</p>
+                  </div>
+                  <div class="sub-price">
+                    <p class="sub-amount">RM 299<span>/mo</span></p>
+                    <p class="sub-count">6 subscribers</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-pricing-card">
+              <div class="card-header">
+                <h3><i class="ti ti-sparkles"></i> AI pricing recommendations</h3>
+                <span class="badge primary">Live</span>
+              </div>
+              <div class="pricing-rec-list">
+                <div class="pricing-rec">
+                  <i class="ti ti-trending-up"></i>
+                  <p>Raise Pro tier to RM 99 — low churn risk based on demand elasticity analysis.</p>
+                </div>
+                <div class="pricing-rec">
+                  <i class="ti ti-discount"></i>
+                  <p>Run 15% flash discount on Basic (Mon–Wed) to convert 12 trial users.</p>
+                </div>
+                <div class="pricing-rec">
+                  <i class="ti ti-package"></i>
+                  <p>Bundle Prompt Eng + LangChain at RM 199 (save RM 39) to boost ARPU.</p>
+                </div>
+              </div>
+              <button class="btn-primary full-width" style="margin-top:1rem" onclick="showToast('AI pricing strategy applied! Revenue projection updated.')">
+                <i class="ti ti-rocket"></i> Apply AI recommendations
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Panel -->
+        <div class="card" style="margin-top:16px">
+          <div class="card-header">
+            <h3><i class="ti ti-shield-check"></i> Security &amp; fraud prevention</h3>
+            <span class="badge success"><i class="ti ti-circle-check"></i> All systems secure</span>
+          </div>
+          <div class="security-grid">
+            <div class="security-item">
+              <div class="security-icon success-icon"><i class="ti ti-lock"></i></div>
+              <p class="security-name">SSL / TLS</p>
+              <p class="security-desc">256-bit encryption on all transactions</p>
+            </div>
+            <div class="security-item">
+              <div class="security-icon info-icon"><i class="ti ti-fingerprint"></i></div>
+              <p class="security-name">2FA auth</p>
+              <p class="security-desc">OTP + biometric verification</p>
+            </div>
+            <div class="security-item">
+              <div class="security-icon warning-icon"><i class="ti ti-eye"></i></div>
+              <p class="security-name">AI fraud scan</p>
+              <p class="security-desc">Real-time anomaly detection</p>
+            </div>
+            <div class="security-item">
+              <div class="security-icon success-icon"><i class="ti ti-certificate"></i></div>
+              <p class="security-name">PCI DSS</p>
+              <p class="security-desc">Level 1 compliant payments</p>
+            </div>
+            <div class="security-item">
+              <div class="security-icon purple-icon"><i class="ti ti-key"></i></div>
+              <p class="security-name">JWT tokens</p>
+              <p class="security-desc">Secure session management</p>
+            </div>
+            <div class="security-item">
+              <div class="security-icon info-icon"><i class="ti ti-shield"></i></div>
+              <p class="security-name">Rate limiting</p>
+              <p class="security-desc">DDoS &amp; brute-force protection</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div><!-- end .main-content -->
+</div><!-- end .main-app -->
+
+<!-- ─── TOAST NOTIFICATION ──────────────────────────────────── -->
+<div id="toast" class="toast hidden">
+  <i class="ti ti-check-circle"></i>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- App Script -->
+<script src="js/app.js"></script>
+</body>
+</html>
